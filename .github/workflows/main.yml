@@ -1,8 +1,0 @@
-on: [ push ]
-
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print
-        run: echo Hello! I'm the workflow from the main branch
