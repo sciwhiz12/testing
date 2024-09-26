@@ -13,6 +13,6 @@ jobs:
 
       - name: Unmark pending nightly variable
         if: ${{ success() && fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
-        run: gh variable set HAS_PENDING_NIGHTLY --body "false"
+        run: gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_NIGHTLY --body "false"
         env: 
           GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}

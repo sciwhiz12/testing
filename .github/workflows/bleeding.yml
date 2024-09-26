@@ -12,7 +12,7 @@ jobs:
 
       - name: Mark pending release and nightly variables
         run: |
-          gh variable set HAS_PENDING_NIGHTLY --body "true"
-          gh variable set HAS_PENDING_RELEASE --body "true"
+          gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_NIGHTLY --body "true"
+          gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_RELEASE --body "true"
         env: 
           GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}
