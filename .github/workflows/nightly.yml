@@ -9,7 +9,7 @@ jobs:
     steps:
 
       - name: Print
-        run: echo Hello! I'm the NIGHTLY publishing workflow
+        run: echo "Hello! I'm the NIGHTLY publishing workflow"
 
       - name: Unmark pending nightly variable
         if: ${{ success() && fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}

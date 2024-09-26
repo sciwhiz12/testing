@@ -8,7 +8,7 @@ jobs:
     steps:
 
       - name: Print
-        run: echo Hello! I'm the BLEEDING publishing workflow
+        run: echo "Hello! I'm the BLEEDING publishing workflow"
 
       - name: Mark pending release and nightly variables
         run: |

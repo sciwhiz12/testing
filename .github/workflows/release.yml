@@ -9,7 +9,7 @@ jobs:
     steps:
 
       - name: Print
-        run: echo Hello! I'm the RELEASE publishing workflow
+        run: echo "Hello! I'm the RELEASE publishing workflow"
 
       - name: Unmark pending release variable
         if: ${{ success() && fromJSON(vars.HAS_PENDING_RELEASE) == true }}
