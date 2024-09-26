@@ -1,0 +1,18 @@
+on: [ workflow_dispatch ]
+
+name: "Publish nightly export"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
+    steps:
+
+      - name: Print
+        run: echo Hello! I'm the NIGHTLY publishing workflow
+
+      - name: Unmark pending nightly variable
+        if: ${{ success() && fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
+        run: gh variable set HAS_PENDING_NIGHTLY --body "false"
+        env: 
+          GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}

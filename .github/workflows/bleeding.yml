@@ -1,0 +1,18 @@
+on: [ workflow_dispatch ]
+
+name: "Publish bleeding export"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Print
+        run: echo Hello! I'm the BLEEDING publishing workflow
+
+      - name: Mark pending release and nightly variables
+        run: |
+          gh variable set HAS_PENDING_NIGHTLY --body "true"
+          gh variable set HAS_PENDING_RELEASE --body "true"
+        env: 
+          GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}

@@ -1,0 +1,18 @@
+on: [ workflow_dispatch ]
+
+name: "Publish release export"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_RELEASE) == true }}
+    steps:
+
+      - name: Print
+        run: echo Hello! I'm the RELEASE publishing workflow
+
+      - name: Unmark pending release variable
+        if: ${{ success() && fromJSON(vars.HAS_PENDING_RELEASE) == true }}
+        run: gh variable set HAS_PENDING_RELEASE --body "false"
+        env: 
+          GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}
