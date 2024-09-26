@@ -5,7 +5,8 @@ name: "Publish nightly export"
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
+    # if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
+    if: ${{ fromJSON(vars.HAS_PENDING_NIGHTLY) == true }}
     steps:
 
       - name: Print

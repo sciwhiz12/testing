@@ -5,7 +5,8 @@ name: "Publish release export"
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_RELEASE) == true }}
+    # if: ${{ github.event_name != 'schedule' || fromJSON(vars.HAS_PENDING_RELEASE) == true }}
+    if: ${{ fromJSON(vars.HAS_PENDING_RELEASE) == true }}
     steps:
 
       - name: Print
