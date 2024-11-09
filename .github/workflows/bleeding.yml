@@ -21,17 +21,20 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-  
+
+      - name: Obtain GAV info
+        id: info
+        run: ./gradlew --quiet printGHActionsOutput >> "$GITHUB_OUTPUT"
+
       - name: Publish export
-        id: export
-        run: ./gradlew -PisCI=true -PreleaseType=release >> "$GITHUB_OUTPUT"
+        run: ./gradlew -PreleaseType=release
 
       - name: Get color
         env:
-          CI_VERSION: ${{ steps.export.outputs.CI_VERSION }}
-          CI_GROUP: ${{ steps.export.outputs.CI_GROUP }}
-          CI_ARTIFACT: ${{ steps.export.outputs.CI_ARTIFACT }}
-          CI_GAME_VERSION: ${{ steps.export.outputs.CI_GAME_VERSION }}
+          CI_VERSION: ${{ steps.info.outputs.CI_VERSION }}
+          CI_GROUP: ${{ steps.info.outputs.CI_GROUP }}
+          CI_ARTIFACT: ${{ steps.info.outputs.CI_ARTIFACT }}
+          CI_GAME_VERSION: ${{ steps.info.outputs.CI_GAME_VERSION }}
         run: |
           echo "The CI_VERSION is $CI_VERSION"
           echo "The CI_GROUP is $CI_GROUP"

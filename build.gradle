@@ -8,10 +8,8 @@
 group = "dev.sciwhiz12"
 version = "0.1"
 
-afterEvaluate {
-    final isCI = Boolean.parseBoolean(project.findProperty('isCI') as String) || Boolean.parseBoolean(System.getenv('CI'))
-    if (isCI) {
-        println('Running on CI.')
+tasks.register('printGHActionsOutput') {
+    doLast {
         println("CI_VERSION=$version")
         println("CI_GROUP=$group")
         println("CI_ARTIFACT=parchment-${20}")
