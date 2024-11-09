@@ -12,7 +12,7 @@ afterEvaluate {
         println('Running on CI.')
         println("CI_VERSION=$version")
         println("CI_GROUP=$group")
-        println("CI_ARTIFACT=parchment-${project.compass.version.get()}")
-        println("CI_GAME_VERSION=${project.compass.version.get()}")
+        println("CI_ARTIFACT=parchment-${20}")
+        println("CI_GAME_VERSION=${20}")
     }
 }
