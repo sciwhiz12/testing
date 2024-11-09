@@ -10,6 +10,34 @@ jobs:
       - name: Print
         run: echo "Hello! I'm the BLEEDING publishing workflow"
 
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+  
+      - name: Publish export
+        id: export
+        run: ./gradlew publishExport -PisCI=true -PreleaseType=release >> "$GITHUB_OUTPUT"
+
+      - name: Get color
+        env:
+          CI_VERSION: ${{ steps.export.outputs.CI_VERSION }}
+          CI_GROUP: ${{ steps.export.outputs.CI_GROUP }}
+          CI_ARTIFACT: ${{ steps.export.outputs.CI_ARTIFACT }}
+          CI_GAME_VERSION: ${{ steps.export.outputs.CI_GAME_VERSION }}
+        run: |
+          echo "The CI_VERSION is $CI_VERSION"
+          echo "The CI_GROUP is $CI_GROUP"
+          echo "The CI_ARTIFACT is $CI_ARTIFACT"
+          echo "The CI_GAME_VERSION is $CI_GAME_VERSION"
+
       - name: Mark pending release and nightly variables
         run: |
           gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_NIGHTLY --body "true"
