@@ -37,6 +37,21 @@ jobs:
           gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_RELEASE --body "true"
         env: 
           GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}
+  create-tag:
+    name: Create tag
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/releases/${{ needs.publish.outputs.CI_GAME_VERSION }}/${{ needs.publish.outputs.CI_VERSION }}',
+              sha: context.sha
+            })
   announce:
     name: Send announcement message
     needs: publish
