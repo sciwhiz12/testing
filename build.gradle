@@ -6,13 +6,13 @@
  */
 
 group = "dev.sciwhiz12"
-version = "0.1"
+version = "2024.01.01"
 
 tasks.register('printGHActionsOutput') {
     doLast {
         println("CI_VERSION=${project.version}")
         println("CI_GROUP=${project.group}")
-        println("CI_ARTIFACT=parchment-${20}")
-        println("CI_GAME_VERSION=${20}")
+        println("CI_ARTIFACT=parchment-${"1.21.3"}")
+        println("CI_GAME_VERSION=${"1.21.3"}")
     }
 }
