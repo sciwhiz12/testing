@@ -24,7 +24,7 @@ jobs:
   
       - name: Publish export
         id: export
-        run: ./gradlew publishExport -PisCI=true -PreleaseType=release >> "$GITHUB_OUTPUT"
+        run: ./gradlew -PisCI=true -PreleaseType=release >> "$GITHUB_OUTPUT"
 
       - name: Get color
         env:
