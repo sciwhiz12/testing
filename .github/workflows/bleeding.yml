@@ -5,11 +5,12 @@ name: "Publish bleeding export"
 jobs:
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      CI_VERSION: ${{ steps.info.outputs.CI_VERSION }}
+      CI_GROUP: ${{ steps.info.outputs.CI_GROUP }}
+      CI_ARTIFACT: ${{ steps.info.outputs.CI_ARTIFACT }}
+      CI_GAME_VERSION: ${{ steps.info.outputs.CI_GAME_VERSION }}
     steps:
-
-      - name: Print
-        run: echo "Hello! I'm the BLEEDING publishing workflow"
-
       - name: Checkout sources
         uses: actions/checkout@v4
 
@@ -29,19 +30,44 @@ jobs:
       - name: Publish export
         run: ./gradlew -PreleaseType=release
 
-      - name: Get color
-        env:
-          CI_VERSION: ${{ steps.info.outputs.CI_VERSION }}
-          CI_GROUP: ${{ steps.info.outputs.CI_GROUP }}
-          CI_ARTIFACT: ${{ steps.info.outputs.CI_ARTIFACT }}
-          CI_GAME_VERSION: ${{ steps.info.outputs.CI_GAME_VERSION }}
-        run: |
-          echo "The CI_VERSION is $CI_VERSION"
-          echo "The CI_GROUP is $CI_GROUP"
-          echo "The CI_ARTIFACT is $CI_ARTIFACT"
-          echo "The CI_GAME_VERSION is $CI_GAME_VERSION"
-
       - name: Mark pending release and nightly variables
+        run: |
+          gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_NIGHTLY --body "true"
+          gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_RELEASE --body "true"
+        env: 
+          GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}
+  announce:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download discord.sh
+        run: curl -LOJ https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh
+
+      - name: Set discord.sh executable
+        run: chmod +x discord.sh
+
+      - name: Send announcement message
+        run: ./discord.sh \
+          --webhook-url="$WEBHOOK" \
+          --username "ParchmentMC" \
+          --color "0xdb092c" \
+          --title "New release for $CI_GAME_VERSION!" \
+          --field "Version;`$CI_VERSION`;false" \
+          --field "Group;`$CI_GROUP`;true" \
+          --field "Artifact;`$CI_ARTIFACT`;true" \
+          --field "Coordinate;`$CI_GROUP:$CI_ARTIFACT:$CI_VERSION`;false" \
+          --timestamp
+        env:
+          WEBHOOK: ${{ secrets.BLEEDING_DISCORD_WEBHOOK }}
+          CI_VERSION: ${{ needs.publish.outputs.CI_VERSION }}
+          CI_GROUP: ${{ needs.publish.outputs.CI_GROUP }}
+          CI_ARTIFACT: ${{ needs.publish.outputs.CI_ARTIFACT }}
+          CI_GAME_VERSION: ${{ needs.publish.outputs.CI_GAME_VERSION }}
+  set-variables:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark pending variables
         run: |
           gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_NIGHTLY --body "true"
           gh -R $GITHUB_SERVER_URL/$GITHUB_REPOSITORY variable set HAS_PENDING_RELEASE --body "true"
