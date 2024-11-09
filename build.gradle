@@ -5,6 +5,8 @@
  * Learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.10.1/samples
  */
 
+group = "dev.sciwhiz12"
+version = "0.1"
 
 afterEvaluate {
     final isCI = Boolean.parseBoolean(project.findProperty('isCI') as String) || Boolean.parseBoolean(System.getenv('CI'))
