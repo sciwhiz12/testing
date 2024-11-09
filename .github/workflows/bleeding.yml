@@ -4,6 +4,7 @@ name: "Publish bleeding export"
 
 jobs:
   publish:
+    name: Publish export
     runs-on: ubuntu-latest
     outputs:
       CI_VERSION: ${{ steps.info.outputs.CI_VERSION }}
@@ -37,6 +38,7 @@ jobs:
         env: 
           GH_TOKEN: ${{ secrets.VARIABLES_GH_TOKEN }}
   announce:
+    name: Send announcement message
     needs: publish
     runs-on: ubuntu-latest
     steps:
@@ -64,6 +66,7 @@ jobs:
           CI_ARTIFACT: ${{ needs.publish.outputs.CI_ARTIFACT }}
           CI_GAME_VERSION: ${{ needs.publish.outputs.CI_GAME_VERSION }}
   set-variables:
+    name: Set repository variables
     needs: publish
     runs-on: ubuntu-latest
     steps:
