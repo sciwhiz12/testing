@@ -49,16 +49,17 @@ jobs:
         run: chmod +x discord.sh
 
       - name: Send announcement message
-        run: ./discord.sh \
-          --webhook-url="$WEBHOOK" \
-          --username "ParchmentMC" \
-          --color "0xdb092c" \
-          --title "New release for $CI_GAME_VERSION!" \
-          --field "Version;`$CI_VERSION`;false" \
-          --field "Group;`$CI_GROUP`;true" \
-          --field "Artifact;`$CI_ARTIFACT`;true" \
-          --field "Coordinate;`$CI_GROUP:$CI_ARTIFACT:$CI_VERSION`;false" \
-          --timestamp
+        run: |
+          ./discord.sh \
+            --webhook-url="$WEBHOOK" \
+            --username "ParchmentMC" \
+            --color "0xdb092c" \
+            --title "New release for $CI_GAME_VERSION!" \
+            --field "Version;`$CI_VERSION`;false" \
+            --field "Group;`$CI_GROUP`;true" \
+            --field "Artifact;`$CI_ARTIFACT`;true" \
+            --field "Coordinate;`$CI_GROUP:$CI_ARTIFACT:$CI_VERSION`;false" \
+            --timestamp
         env:
           WEBHOOK: ${{ secrets.BLEEDING_DISCORD_WEBHOOK }}
           CI_VERSION: ${{ needs.publish.outputs.CI_VERSION }}
