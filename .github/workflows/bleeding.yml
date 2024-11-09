@@ -49,7 +49,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/releases/${{ needs.publish.outputs.CI_GAME_VERSION }}/${{ needs.publish.outputs.CI_VERSION }}',
+              ref: 'refs/tags/releases/${{ needs.publish.outputs.CI_GAME_VERSION }}-${{ needs.publish.outputs.CI_VERSION }}',
               sha: context.sha
             })
   announce:
